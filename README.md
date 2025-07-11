@@ -93,12 +93,11 @@ Note: Prototype & Patent are in progress...
 
 | Layer         | Tools/Technologies Used |
 |---------------|-------------------------|
-| **Frontend**  | React, Next.js, Angular, Google Maps API |
-| **Backend**   | Node.js, Express.js, RESTful APIs |
+| **Frontend**  | React, Next.js, Google Maps API |
+| **Backend**   | Node.js, Express.js, RESTful APIs, socket.io |
 | **AI/ML**     | Custom YOLOv11, OpenCV, EasyOCR, Google Vision API |
-| **Hardware**  | Raspberry Pi, Camera Modules |
-| **Cloud**     | Google Cloud Platform (GCP), Google Cloud Storage, Compute Engine |
-| **Dev Tools** | Docker, Google Colab, SQL |
+| **Hardware**  | Raspberry Pi, Camera Modules, LCD |
+| **Dev Tools** | Google Cloud Platform (GCP), Google Colab, MongoDB |
 
 ---
 ## System Architecture
