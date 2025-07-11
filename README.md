@@ -97,7 +97,7 @@ Note: Prototype & Patent are in progress...
 | **Backend**   | Node.js, Express.js, RESTful APIs, socket.io |
 | **AI/ML**     | Custom YOLOv11, OpenCV, EasyOCR, Google Cloud Vision API |
 | **Hardware**  | Raspberry Pi, Camera Modules, LCD |
-| **Dev Tools** | Google Cloud Platform (GCP), Google Colab, MongoDB |
+| **Dev Tools** | Google Cloud Platform (GCP), Google Colab, MongoDB, OAuth 2.O |
 
 ---
 ## System Architecture
