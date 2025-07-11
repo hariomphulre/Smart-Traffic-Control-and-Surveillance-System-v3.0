@@ -72,167 +72,174 @@
 #     start_monitoring()
 
 
-# import time
-# import sys
-# import lgpio
-# import json
-# import os
-# from watchdog.observers import Observer
-# from watchdog.events import FileSystemEventHandler
-# from google.cloud import vision
+import time
+import sys
+import lgpio
+import json
+import os
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from google.cloud import vision
 
-# ########## Load traffic.json to access data ################
-# FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+########## Load traffic.json to access data ################
+FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
 
-# # Load existing dictionary (if available)
-# def load_data():
-#     try:
-#         with open(FILE_PATH, "r") as file:
-#             data = json.load(file)
-#             print(f"Loaded traffic data: {data}")  # Debug print
-#             return data
-#     except (FileNotFoundError, json.JSONDecodeError) as e:
-#         print(f"Error loading traffic data: {e}")
-#         return {}  # Default to empty dict if file doesn't exist or is corrupted
+# Load existing dictionary (if available)
+def load_data():
+    try:
+        with open(FILE_PATH, "r") as file:
+            data = json.load(file)
+            print(f"Loaded traffic data: {data}")  # Debug print
+            return data
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error loading traffic data: {e}")
+        return {}  # Default to empty dict if file doesn't exist or is corrupted
 
-# ############# Raspberry Pi #####################
+############# Raspberry Pi #####################
 
-# H = lgpio.gpiochip_open(0)
+H = lgpio.gpiochip_open(0)
 
-# traffic_lights = [17, 27, 5, 6, 13, 19, 26, 18, 23, 24, 25, 9]  # R1,R2...Y4
+traffic_lights = [17, 27, 5, 6, 13, 19, 26, 18, 23, 24, 25, 9]  # R1,R2...Y4
 
-# # Initialize GPIO pins
-# for light in traffic_lights:
-#     try:
-#         lgpio.gpio_claim_output(H, light)
-#         lgpio.gpio_write(H, light, 0)  # Start with all lights off
-#         print(f"GPIO {light} initialized successfully")
-#     except Exception as e:
-#         print(f"Error initializing GPIO {light}: {e}")
+# Initialize GPIO pins
+for light in traffic_lights:
+    try:
+        lgpio.gpio_claim_output(H, light)
+        lgpio.gpio_write(H, light, 0)  # Start with all lights off
+        print(f"GPIO {light} initialized successfully")
+    except Exception as e:
+        print(f"Error initializing GPIO {light}: {e}")
 
-# ############## Watch traffic.json ####################
+############## Watch traffic.json ####################
 
-# WATCH_FOLDER = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation"
+WATCH_FOLDER = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation"
 
-# class detected_image_Handler(FileSystemEventHandler):
-#     def on_modified(self, event):
-#         if event.is_directory:
-#             return
+class detected_image_Handler(FileSystemEventHandler):
+    def on_modified(self, event):
+        if event.is_directory:
+            return
         
-#         file_path = event.src_path
-#         print(f"File modified: {file_path}")  # Debug print
+        file_path = event.src_path
+        print(f"File modified: {file_path}")  # Debug print
         
-#         if file_path.lower().endswith('.json') and 'traffic.json' in file_path:
-#             try:
-#                 traffic = load_data()
+        if file_path.lower().endswith('.json') and 'traffic.json' in file_path:
+            try:
+                traffic = load_data()
                 
-#                 # Validate that we have traffic data
-#                 if not traffic:
-#                     print("No traffic data available")
-#                     return
+                # Validate that we have traffic data
+                if not traffic:
+                    print("No traffic data available")
+                    return
                 
-#                 # Turn off all lights first
-#                 for light in traffic_lights:
-#                     lgpio.gpio_write(H, light, 0)
+                # Turn off all lights first
+                for light in traffic_lights:
+                    lgpio.gpio_write(H, light, 0)
                 
-#                 print("All lights turned off, updating based on traffic data...")
+                print("All lights turned off, updating based on traffic data...")
                 
-#                 # Update lights based on traffic.json with safe key access
-#                 X = "R"
-#                 for i in range(12):
-#                     key = X + f"{((i % 4) + 1)}"
-#                     print(f"Checking key: {key}, Value: {traffic.get(key, False)}")
+                # Update lights based on traffic.json with safe key access
+                X = "R"
+                for i in range(12):
+                    key = X + f"{((i % 4) + 1)}"
+                    print(f"Checking key: {key}, Value: {traffic.get(key, False)}")
                     
-#                     if traffic.get(key, False):  # Safe dictionary access
-#                         lgpio.gpio_write(H, traffic_lights[i], 1)
-#                         print(f"Turned ON light {i} (GPIO {traffic_lights[i]}) for key {key}")
-#                     else:
-#                         lgpio.gpio_write(H, traffic_lights[i], 0)
-#                         print(f"Turned OFF light {i} (GPIO {traffic_lights[i]}) for key {key}")
+                    if traffic.get(key, False):  # Safe dictionary access
+                        lgpio.gpio_write(H, traffic_lights[i], 1)
+                        print(f"Turned ON light {i} (GPIO {traffic_lights[i]}) for key {key}")
+                    else:
+                        lgpio.gpio_write(H, traffic_lights[i], 0)
+                        print(f"Turned OFF light {i} (GPIO {traffic_lights[i]}) for key {key}")
                     
-#                     if i == 3:
-#                         X = "G"
-#                     if i == 7:
-#                         X = "Y"
+                    if i == 3:
+                        X = "G"
+                    if i == 7:
+                        X = "Y"
                 
-#                 print("TRAFFIC SIGNALS ARE UPDATED")
+                print("TRAFFIC SIGNALS ARE UPDATED")
                 
-#             except Exception as e:
-#                 print(f"Error updating traffic signals: {e}")
+            except Exception as e:
+                print(f"Error updating traffic signals: {e}")
 
-# def create_sample_traffic_json():
-#     """Create a sample traffic.json file if it doesn't exist"""
-#     if not os.path.exists(FILE_PATH):
-#         sample_data = {
-#             "R1": True, "R2": False, "R3": False, "R4": False,
-#             "G1": False, "G2": True, "G3": False, "G4": False,
-#             "Y1": False, "Y2": False, "Y3": True, "Y4": False
-#         }
-#         try:
-#             with open(FILE_PATH, 'w') as f:
-#                 json.dump(sample_data, f, indent=2)
-#             print(f"Created sample traffic.json at {FILE_PATH}")
-#         except Exception as e:
-#             print(f"Error creating sample file: {e}")
+def create_sample_traffic_json():
+    """Create a sample traffic.json file if it doesn't exist"""
+    if not os.path.exists(FILE_PATH):
+        sample_data = {
+            "R1": True, "R2": False, "R3": False, "R4": False,
+            "G1": False, "G2": True, "G3": False, "G4": False,
+            "Y1": False, "Y2": False, "Y3": True, "Y4": False
+        }
+        try:
+            with open(FILE_PATH, 'w') as f:
+                json.dump(sample_data, f, indent=2)
+            print(f"Created sample traffic.json at {FILE_PATH}")
+        except Exception as e:
+            print(f"Error creating sample file: {e}")
 
-# def test_all_lights():
-#     """Test all lights by turning them on briefly"""
-#     print("Testing all lights...")
-#     for i, light in enumerate(traffic_lights):
-#         lgpio.gpio_write(H, light, 1)
-#         print(f"Testing light {i} (GPIO {light})")
-#         time.sleep(0.5)
-#         lgpio.gpio_write(H, light, 0)
-#         time.sleep(0.2)
-#     print("Light test completed")
+def test_all_lights():
+    """Test all lights by turning them on briefly"""
+    print("Testing all lights...")
+    for i, light in enumerate(traffic_lights):
+        lgpio.gpio_write(H, light, 1)
+        # print(f"Testing light {i} (GPIO {light})")
+        # time.sleep(0.5)
+        # lgpio.gpio_write(H, light, 0)
+        # time.sleep(0.2)
+    print("Light test completed")
+    time.sleep(3)
+    for i, light in enumerate(traffic_lights):
+        lgpio.gpio_write(H, light, 0)
 
-# def start_monitoring():
-#     """Start monitoring the folder for JSON file changes."""
-#     # Create sample file if needed
-#     create_sample_traffic_json()
+def start_monitoring():
+    """Start monitoring the folder for JSON file changes."""
+    # Create sample file if needed
+    create_sample_traffic_json()
     
-#     # Test all lights first
-#     test_all_lights()
+    # Test all lights first
+    test_all_lights()
     
-#     # Load initial state
-#     traffic = load_data()
-#     if traffic:
-#         print("Loading initial traffic state...")
-#         # Trigger initial update
-#         handler = detected_image_Handler()
-#         class MockEvent:
-#             def __init__(self):
-#                 self.is_directory = False
-#                 self.src_path = FILE_PATH
-#         handler.on_modified(MockEvent())
+    # Load initial state
+    traffic = load_data()
+    if traffic:
+        print("Loading initial traffic state...")
+        # Trigger initial update
+        handler = detected_image_Handler()
+        class MockEvent:
+            def __init__(self):
+                self.is_directory = False
+                self.src_path = FILE_PATH
+        handler.on_modified(MockEvent())
     
-#     event_handler = detected_image_Handler()
-#     observer = Observer()
-#     observer.schedule(event_handler, WATCH_FOLDER, recursive=True)
-#     observer.start()
-#     print(f"Watching folder: {WATCH_FOLDER}")
+    event_handler = detected_image_Handler()
+    observer = Observer()
+    observer.schedule(event_handler, WATCH_FOLDER, recursive=True)
+    observer.start()
+    print(f"Watching folder: {WATCH_FOLDER}")
     
-#     try:
-#         while True:
-#             time.sleep(1)
-#     except KeyboardInterrupt:
-#         print("Stopping monitoring...")
-#         observer.stop()
-#     except Exception as e:
-#         print(f"Error in monitoring: {e}")
-#         observer.stop()
-#     finally:
-#         # Clean up GPIO resources
-#         print("Cleaning up GPIO resources...")
-#         for light in traffic_lights:
-#             lgpio.gpio_write(H, light, 0)  # Turn off all lights
-#         lgpio.gpiochip_close(H)
-#         print("GPIO cleanup completed")
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Stopping monitoring...")
+        observer.stop()
+    except Exception as e:
+        print(f"Error in monitoring: {e}")
+        observer.stop()
+    finally:
+        # Clean up GPIO resources
+        print("Cleaning up GPIO resources...")
+        for light in traffic_lights:
+            lgpio.gpio_write(H, light, 0)  # Turn off all lights
+        lgpio.gpiochip_close(H)
+        print("GPIO cleanup completed")
     
-#     observer.join()
+    observer.join()
 
-# if __name__ == "__main__":
-#     start_monitoring()
+if __name__ == "__main__":
+    start_monitoring()
+
+
+
+
 
 import time
 import sys
