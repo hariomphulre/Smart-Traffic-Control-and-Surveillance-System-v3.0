@@ -95,7 +95,7 @@ Note: Prototype & Patent are in progress...
 |---------------|-------------------------|
 | **Frontend**  | React, Next.js, Google Maps API |
 | **Backend**   | Node.js, Express.js, RESTful APIs, socket.io |
-| **AI/ML**     | Custom YOLOv11, OpenCV, EasyOCR, Google Vision API |
+| **AI/ML**     | Custom YOLOv11, OpenCV, EasyOCR, Google Cloud Vision API |
 | **Hardware**  | Raspberry Pi, Camera Modules, LCD |
 | **Dev Tools** | Google Cloud Platform (GCP), Google Colab, MongoDB |
 
