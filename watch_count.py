@@ -60,12 +60,23 @@ if __name__ == "__main__":
     observer.start()
     print("Watching for file changes...")
 
+    # try:
+    #     while True:
+    #         time.sleep(1)
+    # except KeyboardInterrupt:
+    #     observer.stop()
+    # observer.join()
+
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
+        print("Stopped by user.")
+    finally:
         observer.stop()
-    observer.join()
+        observer.join()
+        display.lcd_clear()  # Clear the display on exit
+        print("Display cleared and observer stopped.")
 
 # def start_monitoring():
 #     """Start monitoring the folder for JSON file changes."""

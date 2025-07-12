@@ -2,15 +2,15 @@
     "R1": true,
     "R2": false,
     "R3": true,
-    "R4": true,
+    "R4": false,
     "G1": false,
-    "G2": true,
+    "G2": false,
     "G3": false,
     "G4": false,
     "Y1": false,
-    "Y2": false,
+    "Y2": true,
     "Y3": false,
-    "Y4": false,
+    "Y4": true,
     "T1": 3,
     "T2": 10,
     "T3": 5,
@@ -19,5 +19,5 @@
     "A2": false,
     "A3": false,
     "A4": false,
-    "C": 16
+    "C": 2
 }
