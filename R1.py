@@ -275,7 +275,7 @@ while True:
     #############################
 
     ############## json file to store helmet data with vehicle track id #############
-    FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/server/vehicle_data_with_helmet/helmet_data.json"
+    FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/server/vehicle_data_with_helmet/helmet_data.json"
     # Load existing dictionary (if available)
     def load_dict():
         try:
@@ -292,7 +292,7 @@ while True:
     helmet_dict=load_dict()
 
     #################### json file to store speed data #############################
-    FILE_PATH2= r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/server/vehicle_data_with_helmet/speed_data.json"
+    FILE_PATH2= r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/server/vehicle_data_with_helmet/speed_data.json"
     def load_dict2():
         try:
             with open(FILE_PATH2, "r") as file2:
@@ -305,7 +305,7 @@ while True:
     speed_dict=load_dict2()
 
     ################# UPDATE TRAFFIC VOLUME TO JSON ####################
-    FILE_PATH3 = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+    FILE_PATH3 = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
     TEMP_PATH3 = FILE_PATH3 + ".tmp"
     LOCK_PATH3 = FILE_PATH3 + ".lock"  # Lock file will have the same name as the original file with ".lock" extension
 

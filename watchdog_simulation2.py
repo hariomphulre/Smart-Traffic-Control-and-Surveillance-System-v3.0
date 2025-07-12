@@ -10,7 +10,7 @@ client = vision.ImageAnnotatorClient.from_service_account_file('linen-marking-45
 WATCH_FOLDER = 'server/vehicle_data_with_helmet/all_license_plate_img'
 
 ############### json file to store license plate with track_id #############
-FILE_PATH = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/server/vehicle_data_with_helmet/new_license_data.json"
+FILE_PATH = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/server/vehicle_data_with_helmet/new_license_data.json"
 # Load existing dictionary (if available)
 def load_dict():
     try:

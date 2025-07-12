@@ -7,7 +7,7 @@
 # from google.cloud import vision
 
 # ########## Load traffic.json to access data ################
-# FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+# FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
 
 # # Load existing dictionary (if available)
 # def load_data():
@@ -28,7 +28,7 @@
 
 # ############## Watch traffic.json ####################
 
-# WATCH_FOLDER="/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation"
+# WATCH_FOLDER="/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation"
 
 # class detected_image_Handler(FileSystemEventHandler):
 #     def on_modified(self, event):
@@ -82,7 +82,7 @@ from watchdog.events import FileSystemEventHandler
 from google.cloud import vision
 
 ########## Load traffic.json to access data ################
-FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
 
 # Load existing dictionary (if available)
 def load_data():
@@ -112,7 +112,7 @@ for light in traffic_lights:
 
 ############## Watch traffic.json ####################
 
-WATCH_FOLDER = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation"
+WATCH_FOLDER = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation"
 
 class detected_image_Handler(FileSystemEventHandler):
     def on_modified(self, event):
@@ -251,7 +251,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 ########## Load traffic.json to access data ################
-FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
 
 # Load existing dictionary (if available)
 def load_data():
@@ -424,7 +424,7 @@ seven_segment_controller = None
 
 ############## Watch traffic.json ####################
 
-WATCH_FOLDER = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation"
+WATCH_FOLDER = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation"
 
 class detected_image_Handler(FileSystemEventHandler):
     def on_modified(self, event):

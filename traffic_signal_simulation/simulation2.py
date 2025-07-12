@@ -1,7 +1,7 @@
 # import json
 # import time
 # import sys
-# FILE_PATH = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+# FILE_PATH = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
 # # Load existing dictionary (if available)
 # def load_data():
 #     try:
@@ -216,7 +216,7 @@ import json
 import time
 import sys
 
-FILE_PATH = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v2/traffic_signal_simulation/traffic.json"
+FILE_PATH = "/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
 
 # Load existing dictionary (if available)
 def load_data():
