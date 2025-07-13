@@ -10,7 +10,7 @@ from time import sleep
 display = drivers.Lcd()
 
 ########## Load traffic.json to access data ################
-FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
+FILE_PATH = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic2.json"
 
 # Load existing dictionary (if available)
 def load_data():
@@ -33,11 +33,11 @@ class detected_image_Handler(FileSystemEventHandler):
         file_path = event.src_path
         # print(f"File modified: {file_path}")  # Debug print
         
-        if file_path.lower().endswith('.json') and 'traffic.json' in file_path:
+        if file_path.lower().endswith('.json') and 'traffic2.json' in file_path:
             try:
                 traffic = load_data()
 
-                c_value = traffic.get("C", "N/A")
+                c_value = traffic.get("C1", "N/A")
                 if isinstance(c_value, int):
                     c_str = f"{c_value:02d}"
                 else:
@@ -45,8 +45,7 @@ class detected_image_Handler(FileSystemEventHandler):
 
                 display.lcd_clear()
                 display.lcd_display_string(f"R1 Timer: {c_str}".ljust(16), 1)
-                if(traffic.get("A1","N/A")):
-                    display.lcd_display_string(f"      EMERGENCY!".ljust(16), 2)
+                if(traffic.get("A1","N/A")) display.lcd_display_string(f"Emergency!".ljust(16), 2)
 
                 print(f"R1 Countdown updated: {c_value}")
                 
