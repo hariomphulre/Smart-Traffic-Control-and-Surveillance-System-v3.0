@@ -1,10 +1,10 @@
 {
-    "R1": false,
-    "R2": true,
+    "R1": true,
+    "R2": false,
     "R3": true,
     "R4": true,
-    "G1": true,
-    "G2": false,
+    "G1": false,
+    "G2": true,
     "G3": false,
     "G4": false,
     "Y1": false,
@@ -14,10 +14,14 @@
     "T1": 4,
     "T2": 10,
     "T3": 5,
-    "T4": 19,
+    "T4": 1,
     "A1": true,
     "A2": false,
     "A3": false,
     "A4": false,
-    "C": 1
+    "C": 1,
+    "C1": 0,
+    "C2": 20,
+    "C3": 0,
+    "C4": 0
 }

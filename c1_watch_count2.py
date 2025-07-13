@@ -45,7 +45,8 @@ class detected_image_Handler(FileSystemEventHandler):
 
                 display.lcd_clear()
                 display.lcd_display_string(f"R1 Timer: {c_str}".ljust(16), 1)
-                if(traffic.get("A1","N/A")) display.lcd_display_string(f"Emergency!".ljust(16), 2)
+                if(traffic.get("A1","N/A")):
+                    display.lcd_display_string(f"      EMERGENCY!".ljust(16), 2)
 
                 print(f"R1 Countdown updated: {c_value}")
                 
