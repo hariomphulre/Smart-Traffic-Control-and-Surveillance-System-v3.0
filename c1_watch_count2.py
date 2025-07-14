@@ -37,18 +37,40 @@ class detected_image_Handler(FileSystemEventHandler):
             try:
                 traffic = load_data()
 
-                c_value = traffic.get("C1", "N/A")
-                if isinstance(c_value, int):
-                    c_str = f"{c_value:02d}"
+                c1_value = traffic.get("C1", "N/A")
+                if isinstance(c1_value, int):
+                    c1_str = f"{c1_value:02d}"
                 else:
-                    c_str = str(c_value)
+                    c1_str = str(c1_value)
+                
+                c2_value = traffic.get("C2", "N/A")
+                if isinstance(c2_value, int):
+                    c2_str = f"{c2_value:02d}"
+                else:
+                    c2_str = str(c2_value)
+
+                c3_value = traffic.get("C3", "N/A")
+                if isinstance(c3_value, int):
+                    c3_str = f"{c3_value:02d}"
+                else:
+                    c3_str = str(c3_value)
+
+                c4_value = traffic.get("C4", "N/A")
+                if isinstance(c4_value, int):
+                    c4_str = f"{c4_value:02d}"
+                else:
+                    c4_str = str(c4_value)
 
                 display.lcd_clear()
-                display.lcd_display_string(f"R1 Timer: {c_str}".ljust(16), 1)
-                if(traffic.get("A1","N/A")):
-                    display.lcd_display_string(f"      EMERGENCY!".ljust(16), 2)
+                # display.lcd_display_string(f"R1 Timer: {c1_str}".ljust(16), 1)
+                # if(traffic.get("A1","N/A")):
+                #     display.lcd_display_string(f"      EMERGENCY!".ljust(16), 2)
 
-                print(f"R1 Countdown updated: {c_value}")
+                # print(f"R1 Countdown updated: {c1_value}")
+
+
+                display.lcd_display_string(f"C1: {c1_str} ,C2: {c2_str}".ljust(16), 1)
+                display.lcd_display_string(f"C3: {c3_str} ,C4: {c4_str}".ljust(16), 2)
                 
             except KeyboardInterrupt:
                 print(f"Error updating countdown: {e}")

@@ -305,7 +305,7 @@ while True:
     speed_dict=load_dict2()
 
     ################# UPDATE TRAFFIC VOLUME TO JSON ####################
-    FILE_PATH3 = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic.json"
+    FILE_PATH3 = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic2.json"
     TEMP_PATH3 = FILE_PATH3 + ".tmp"
     LOCK_PATH3 = FILE_PATH3 + ".lock"  # Lock file will have the same name as the original file with ".lock" extension
 
@@ -332,7 +332,7 @@ while True:
 
 
 
-    # FILE_PATH3=r"C:\Users\hario\OneDrive\Desktop\Github\Smart-Traffic-Control-and-Surveillance-System\demo\traffic.json"
+    # FILE_PATH3=r"C:\Users\hario\OneDrive\Desktop\Github\Smart-Traffic-Control-and-Surveillance-System\demo\traffic2.json"
     # TEMP_PATH3 = FILE_PATH3 + ".tmp"
     # def load_dict3():
     #     try:
