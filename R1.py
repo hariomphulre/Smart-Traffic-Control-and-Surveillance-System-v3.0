@@ -71,9 +71,17 @@ elif os.path.isfile(img_source):
 elif 'usb' in img_source:
     source_type = 'usb'
     usb_idx = int(img_source[3:])
+
 elif 'picamera' in img_source:
     source_type = 'picamera'
     picam_idx = int(img_source[8:])
+
+################
+# elif 'picamera' in img_source:
+#     source_type = 'picamera'
+#     picam_idx = int(img_source[8:]) if len(img_source) > 8 else 0
+# ##################
+
 else:
     print(f'Input {img_source} is invalid. Please try again.')
     sys.exit(0)
