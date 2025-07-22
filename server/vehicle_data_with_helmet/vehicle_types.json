@@ -3,5 +3,6 @@
     "bike": 27,
     "car": 24,
     "truck": 12,
-    "ambulance": 3    
+    "ambulance": 3,
+    "fireBrigade": 0
 }

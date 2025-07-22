@@ -59,7 +59,7 @@ const VehicleTypeDistribution = ({ vehicleData }) => {
       });
       
       // Ensure we have at least one of each type to make charts look nicer
-      const processedData = data.map(value => Math.max(1, value));
+      const processedData = data.map(value => Math.max(0, value));
       
       // Verify we have some actual data
       const hasData = processedData.some(value => value > 1);
