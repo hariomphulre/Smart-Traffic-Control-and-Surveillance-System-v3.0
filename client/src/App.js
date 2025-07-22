@@ -73,13 +73,27 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BACKEND_URL}/api/data`);
-        const { speedData, licenseData, helmetData, vehicleImages, licensePlateImages } = response.data;
+        const { speedData, licenseData, helmetData, vehicleTypes: vehicleTypesData, cntVehicleTypes, vehicleImages, licensePlateImages } = response.data;
         setSpeedData(speedData || {});
         setLicenseData(licenseData || {});
         setHelmetData(helmetData || {});
         setVehicleImages(vehicleImages || []);
         setLicensePlateImages(licensePlateImages || []);
-        processVehicleTypes(licenseData || {});
+        
+        // If we have vehicle_types.json data, use it; otherwise fall back to processing license data
+        if (vehicleTypesData && Object.keys(vehicleTypesData).length > 0) {
+          const mappedTypes = {
+            'Car': vehicleTypesData.car || 0,
+            'Motorcycle': vehicleTypesData.bike || 0,
+            'Bus': vehicleTypesData.bus || 0,
+            'Truck': vehicleTypesData.truck || 0,
+            'Ambulance': vehicleTypesData.ambulance || 0,
+            'Fire Brigade': vehicleTypesData.fireBrigade || 0
+          };
+          setVehicleTypes(mappedTypes);
+        } else {
+          processVehicleTypes(licenseData || {});
+        }
         setLoading(false);
       } catch (err) {
         setError('Failed to load data. Please refresh the page.');
@@ -143,7 +157,16 @@ function App() {
     const intervalId = setInterval(async () => {
       try {
         const response = await axios.get(`${BACKEND_URL}/api/data`);
-        const { speedData, licenseData, helmetData, vehicleImages, licensePlateImages } = response.data;
+        const { 
+          speedData, 
+          licenseData, 
+          helmetData, 
+          vehicleTypes: vehicleTypesData, 
+          cntVehicleTypes, 
+          vehicleImages, 
+          licensePlateImages 
+        } = response.data;
+        
         setSpeedData(prevData => {
           if (JSON.stringify(prevData) !== JSON.stringify(speedData)) {
             showNotification('Speed data updated');
@@ -151,14 +174,35 @@ function App() {
           }
           return prevData;
         });
-        setLicenseData(prevData => {
-          if (JSON.stringify(prevData) !== JSON.stringify(licenseData)) {
-            processVehicleTypes(licenseData);
-            showNotification('License plate data updated');
-            return licenseData;
-          }
-          return prevData;
-        });
+        
+        // Handle vehicle types from the API
+        if (vehicleTypesData && Object.keys(vehicleTypesData).length > 0) {
+          setVehicleTypes(prevData => {
+            const mappedTypes = {
+              'Car': vehicleTypesData.car || 0,
+              'Motorcycle': vehicleTypesData.bike || 0,
+              'Bus': vehicleTypesData.bus || 0,
+              'Truck': vehicleTypesData.truck || 0,
+              'Ambulance': vehicleTypesData.ambulance || 0,
+              'Fire Brigade': vehicleTypesData.fireBrigade || 0
+            };
+            
+            if (JSON.stringify(prevData) !== JSON.stringify(mappedTypes)) {
+              showNotification('Vehicle types updated');
+              return mappedTypes;
+            }
+            return prevData;
+          });
+        } else {
+          setLicenseData(prevData => {
+            if (JSON.stringify(prevData) !== JSON.stringify(licenseData)) {
+              processVehicleTypes(licenseData);
+              showNotification('License plate data updated');
+              return licenseData;
+            }
+            return prevData;
+          });
+        }
         setHelmetData(prevData => {
           if (JSON.stringify(prevData) !== JSON.stringify(helmetData)) {
             showNotification('Helmet data updated');
