@@ -1,0 +1,8 @@
+{
+    "bus": 5,
+    "bike": 40,
+    "car": 99,
+    "truck": 14,
+    "ambulance": 3,
+    "fireBrigade": 0
+}

@@ -32,12 +32,12 @@ const VehicleTypeDistribution = ({ vehicleData }) => {
 
   // Define vehicle types with their properties
   const vehicleTypes = [
-    { name: 'Car', icon: 'fa-car', color: '#1976d2', description: 'Personal vehicles' },
+    { name: 'Car', icon: 'fa-car-side', color: '#1976d2', description: 'Personal vehicles' },
     { name: 'Motorcycle', icon: 'fa-motorcycle', color: '#dc3545', description: '2-wheelers' },
     { name: 'Truck', icon: 'fa-truck', color: '#28a745', description: 'Commercial transport' },
     { name: 'Bus', icon: 'fa-bus', color: '#ffc107', description: 'Public transport' },
-    { name: 'Van', icon: 'fa-van-shuttle', color: '#6f42c1', description: 'Multi-purpose' },
-    { name: 'Taxi', icon: 'fa-taxi', color: '#fd7e14', description: 'For-hire service' }
+    { name: 'Ambulance', icon: 'fa-ambulance', color: '#6f42c1', description: 'Emergency vehicle' },
+    { name: 'Fire Brigade', icon: 'fa-fire', color: '#fd7e14', description: 'Emergency vehicle' }
   ];
 
   // Prepare chart data
@@ -49,24 +49,24 @@ const VehicleTypeDistribution = ({ vehicleData }) => {
         return;
       }
 
-      // Extract vehicle type labels and data
-      const labels = vehicleTypes.map(type => type.name).slice(0, 4); // Only use the first 4 types for real data
+      // Extract vehicle type labels and data for all 6 vehicle types
+      const labels = vehicleTypes.map(type => type.name); // Use all defined vehicle types
       
       // Map the vehicle data to the defined types, using 0 if a type doesn't exist in the data
-      const data = vehicleTypes.slice(0, 4).map(type => {
-        // Get data for standard types (Car, Motorcycle, Truck, Bus)
+      const data = vehicleTypes.map(type => {
+        // Get data for all types (Car, Motorcycle, Truck, Bus, Ambulance, Fire Brigade)
         return vehicleData[type.name] || 0;
       });
       
       // Ensure we have at least one of each type to make charts look nicer
-      const processedData = data.map(value => Math.max(1, value));
+      const processedData = data.map(value => Math.max(0, value));
       
       // Verify we have some actual data
       const hasData = processedData.some(value => value > 1);
       
-      // Extract colors for the chart
-      const backgroundColor = vehicleTypes.slice(0, 4).map(type => type.color);
-      const hoverBackgroundColor = vehicleTypes.slice(0, 4).map(type => {
+      // Extract colors for the chart for all 6 types
+      const backgroundColor = vehicleTypes.map(type => type.color);
+      const hoverBackgroundColor = vehicleTypes.map(type => {
         // Create slightly brighter versions for hover
         const color = type.color;
         return color;

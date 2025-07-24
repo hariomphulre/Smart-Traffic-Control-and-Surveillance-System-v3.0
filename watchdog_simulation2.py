@@ -5,7 +5,7 @@ from google.cloud import vision
 import io
 import json
 
-client = vision.ImageAnnotatorClient.from_service_account_file('linen-marking-452309-e9-26175acd071a.json')
+client = vision.ImageAnnotatorClient.from_service_account_file('linen-marking-452309-e9-c277aab90ddc.json')
 
 WATCH_FOLDER = 'server/vehicle_data_with_helmet/all_license_plate_img'
 

@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 import PIL.Image
+from collections import defaultdict
 # import google.generativeai as genai
 # genai.configure(api_key="AIzaSyDX9D290jNNJ0e6MShOt3S8v_xPz6ZNwXw")
 import json
@@ -305,6 +306,19 @@ while True:
             json.dump(data2,file2,indent=4)
     speed_dict=load_dict2()
 
+    ################## json file to store types of vehicle ############################
+    FILE_PATH5= r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/server/vehicle_data_with_helmet/vehicle_types.json"
+    def load_dict5():
+        try:
+            with open(FILE_PATH5, "r") as file5:
+                return json.load(file5)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+    def save_dict5(data5):
+        with open(FILE_PATH5,"w") as file5:
+            json.dump(data5,file5,indent=4)
+    vehicle_dict=load_dict5()
+
     ################# UPDATE TRAFFIC VOLUME TO JSON ####################
     FILE_PATH3 = r"/home/pi/Desktop/Smart-Traffic-Control-and-Surveillance-System-v3.0/traffic_signal_simulation/traffic2.json"
     TEMP_PATH3 = FILE_PATH3 + ".tmp"
@@ -499,7 +513,18 @@ while True:
             if track_id not in track_conf:
                 track_conf.update({track_id:float(f'{conf:.2f}')})
                 vehicle_file=f"{output_dir}/{labels[classidx]}_{track_id}.jpg"
-                cv2.imwrite(vehicle_file,crop_img)
+                if(classname!="helmet"):
+                    cv2.imwrite(vehicle_file,crop_img)
+                ############## update vehilce_tyeps.json #################################
+                if(classname=="car" or classname=="bike" or classname=="truck" or classname=="bus"):
+                    # vehicle_cnt.add(classname) 
+                    # vehicle_cnt_dict=load_dict4()
+                    # vehicle_cnt_dict.update({'vehicle_types':len(vehicle_cnt)})
+                    # save_dict4(vehicle_cnt_dict)
+
+                    vehicle_dict = defaultdict(int, load_dict5())
+                    vehicle_dict[classname] += 1
+                    save_dict5(dict(vehicle_dict))
                 ######### upload on sort_detected_image ##############
                 if(classname=="license_plate"):
                     if(conf<0.57):
@@ -507,7 +532,8 @@ while True:
                     else:
                         track_sort_conf.update({track_id:True})
                     vehicle_file2=f"{output_dir2}/{labels[classidx]}_{track_id}.jpg"
-                    cv2.imwrite(vehicle_file2,crop_img)
+                    if(classname!="helmet"):
+                        cv2.imwrite(vehicle_file2,crop_img)
                 ########### upload crop_img on AWS S3 ################
                 # s3.meta.client.upload_file(vehicle_file, 'license-img-data', f'{labels[classidx]}_{track_id}.jpg')
                 ############ Gemini ####################

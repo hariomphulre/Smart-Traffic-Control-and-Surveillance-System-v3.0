@@ -43,6 +43,8 @@ const upload = multer({ storage: storage });
 const speedDataPath = path.join(__dirname, 'vehicle_data_with_helmet/speed_data.json');
 const licenseDataPath = path.join(__dirname, 'vehicle_data_with_helmet/new_license_data.json');
 const helmetDataPath = path.join(__dirname, 'vehicle_data_with_helmet/helmet_data.json');
+const vehicleTypesPath = path.join(__dirname, 'vehicle_data_with_helmet/vehicle_types.json');
+const cntVehicleTypesPath = path.join(__dirname, 'vehicle_data_with_helmet/cnt_vehicle_types.json');
 const vehicleImagesPath = path.join(__dirname, 'vehicle_data_with_helmet/all_vehicle_detected_img');
 const licensePlateImagesPath = path.join(__dirname, 'vehicle_data_with_helmet/all_license_plate_img');
 
@@ -122,8 +124,10 @@ app.get('/api/data', (req, res) => {
   const speedData = readJsonFile(speedDataPath);
   const licenseData = readJsonFile(licenseDataPath);
   const helmetData = readJsonFile(helmetDataPath);
+  const vehicleTypes = readJsonFile(vehicleTypesPath);
+  const cntVehicleTypes = readJsonFile(cntVehicleTypesPath);
   
-  console.log(`Data loaded - Speed data: ${Object.keys(speedData).length} entries, License data: ${Object.keys(licenseData).length} entries, Helmet data: ${Object.keys(helmetData).length} entries`);
+  console.log(`Data loaded - Speed data: ${Object.keys(speedData).length} entries, License data: ${Object.keys(licenseData).length} entries, Helmet data: ${Object.keys(helmetData).length} entries, Vehicle types data loaded`);
   
   // Get image file names
   let vehicleImages = [];
@@ -161,6 +165,8 @@ app.get('/api/data', (req, res) => {
     speedData,
     licenseData,
     helmetData,
+    vehicleTypes,
+    cntVehicleTypes,
     vehicleImages,
     licensePlateImages
   });
@@ -237,7 +243,13 @@ app.post('/api/challan', async (req, res) => {
 // Set up file watchers for data changes
 const setupWatchers = () => {
   // Watch JSON files
-  const jsonWatcher = chokidar.watch([speedDataPath, licenseDataPath, helmetDataPath], {
+  const jsonWatcher = chokidar.watch([
+    speedDataPath, 
+    licenseDataPath, 
+    helmetDataPath, 
+    vehicleTypesPath, 
+    cntVehicleTypesPath
+  ], {
     persistent: true,
     ignoreInitial: true
   });
@@ -250,6 +262,10 @@ const setupWatchers = () => {
       type = 'license';
     } else if (filePath.includes('helmet_data')) {
       type = 'helmet';
+    } else if (filePath.includes('vehicle_types')) {
+      type = 'vehicle_types';
+    } else if (filePath.includes('cnt_vehicle_types')) {
+      type = 'cnt_vehicle_types';
     }
     
     console.log(`${type} data updated at ${new Date().toLocaleTimeString()}`);
