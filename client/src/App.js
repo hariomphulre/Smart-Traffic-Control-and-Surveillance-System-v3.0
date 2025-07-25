@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Form, InputGroup, DropdownButton, Dropdown, Card, Badge, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import { AuthProvider, useAuth } from './AuthContext';
 
 // Import components
 import VehicleDataDisplay from './components/VehicleDataDisplay';
@@ -18,6 +22,7 @@ import Footer from './components/Footer';
 
 // Import styles
 import './styles/Dashboard.css';
+import './styles/DarkMode.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 
@@ -48,6 +53,34 @@ const locationData = {
     'Durgapur': ['City Center', 'Bidhannagar', 'Benachity']
   }
 };
+
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  return user ? children : <Navigate to="/login" />;
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/*" element={
+        <ProtectedRoute>
+          <App />
+        </ProtectedRoute>
+      } />
+    </Routes>
+  );
+}
+
+const AppWrapper = () => (
+  <AuthProvider>
+    <Router>
+      <AppRoutes />
+    </Router>
+  </AuthProvider>
+);
 
 function App() {
   const [speedData, setSpeedData] = useState({});
@@ -572,4 +605,4 @@ function App() {
   );
 }
 
-export default App;
+export default AppWrapper;

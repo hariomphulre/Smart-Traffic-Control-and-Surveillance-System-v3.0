@@ -5,9 +5,24 @@ const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
 const chokidar = require('chokidar');
+const nodemailer = require('nodemailer');
+const authRouter = require('./auth/auth.routes');
 
 const app = express();
 const server = http.createServer(app);
+const mongoose = require('mongoose');
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/traffic';
+
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected'))
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1); // Optional: exit if DB connection fails
+});
 
 // Middleware
 app.use(cors());
@@ -44,6 +59,48 @@ const licenseDataPath = path.join(__dirname, 'vehicle_data_with_helmet/new_licen
 const helmetDataPath = path.join(__dirname, 'vehicle_data_with_helmet/helmet_data.json');
 const vehicleImagesPath = path.join(__dirname, 'vehicle_data_with_helmet/all_vehicle_detected_img');
 const licensePlateImagesPath = path.join(__dirname, 'vehicle_data_with_helmet/all_license_plate_img');
+
+// Mock license plate to email mapping
+const licenseToEmail = {
+  'KA01AB1234': 'sujalpawar00007@gmail.com',
+  'MH12XY9876': 'user2@example.com',
+  // Add more as needed
+};
+
+// Challan email sender
+async function sendChallanEmail({ licensePlate, violationType, time, place, imagePath }) {
+  const email = licenseToEmail[licensePlate];
+  if (!email) throw new Error('No email found for license plate');
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'hairstenyt@gmail.com', // replace with your email
+      pass: 'mgzpnqninbmdowsl'     // replace with your app password
+    }
+  });
+
+  const mailOptions = {
+    from: 'hairstenyt@gmail.com',
+    to: email,
+    subject: `Traffic Violation Challan - ${violationType}`,
+    html: `
+      <p>Dear vehicle owner,</p>
+      <p>Your vehicle <b>${licensePlate}</b> was detected <b>${violationType}</b> at <b>${place}</b> on <b>${time}</b>.</p>
+      <p>Please find the attached image as proof.</p>
+      <p>To pay your fine, visit: <a href="https://mahatrafficechallan.gov.in/payechallan/PaymentService.htm?_qc=bffc5dacbaa5907a7937aa6721a902bc">Pay Challan</a></p>
+      <p>Thank you.</p>
+    `,
+    attachments: [
+      {
+        filename: 'violation.jpg',
+        path: imagePath
+      }
+    ]
+  };
+
+  await transporter.sendMail(mailOptions);
+}
 
 // Helper function to read JSON safely
 const readJsonFile = (filePath) => {
@@ -179,6 +236,18 @@ app.post('/api/upload/images', upload.fields([
   }
 });
 
+// API endpoint to trigger challan email
+app.post('/api/challan', async (req, res) => {
+  const { licensePlate, violationType, time, place, imagePath } = req.body;
+  try {
+    await sendChallanEmail({ licensePlate, violationType, time, place, imagePath });
+    res.json({ success: true, message: 'Challan email sent.' });
+  } catch (error) {
+    console.error('Challan email error:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Set up file watchers for data changes
 const setupWatchers = () => {
   // Watch JSON files
@@ -221,6 +290,8 @@ const setupWatchers = () => {
   
   console.log('File watchers set up to monitor data changes');
 };
+
+app.use('/api/auth', authRouter);
 
 app.get('/keep-alive', (_, res) => res.send('Still alive'));
 

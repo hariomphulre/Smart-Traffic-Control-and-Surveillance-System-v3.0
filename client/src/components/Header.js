@@ -1,8 +1,16 @@
 import React from 'react';
-import { Container, Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
+import { Container, Navbar, Nav, NavDropdown, Badge, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 import '../styles/Header.css';
 
 const Header = ({ activeTab, setActiveTab }) => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
   return (
     <header>
       {/* Main header with logo and title */}
@@ -36,32 +44,39 @@ const Header = ({ activeTab, setActiveTab }) => {
             </div>
             
             {/* User menu */}
-            <NavDropdown 
-              title={
-                <div className="d-flex align-items-center">
-                  <div className="avatar-circle me-1">
-                    <i className="fas fa-user-circle"></i>
+            {user ? (
+              <NavDropdown 
+                title={
+                  <div className="d-flex align-items-center">
+                    <div className="avatar-circle me-1">
+                      <i className="fas fa-user-circle"></i>
+                    </div>
+                    <span className="d-none d-lg-inline">{user.name}</span>
                   </div>
-                  <span className="d-none d-lg-inline">Admin</span>
-                </div>
-              } 
-              align="end"
-              id="user-dropdown"
-            >
-              <NavDropdown.Item href="#">
-                <i className="fas fa-user me-2"></i>
-                Profile
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={() => setActiveTab('settings')}>
-                <i className="fas fa-cog me-2"></i>
-                Settings
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#">
-                <i className="fas fa-sign-out-alt me-2"></i>
-                Sign out
-              </NavDropdown.Item>
-            </NavDropdown>
+                } 
+                align="end"
+                id="user-dropdown"
+              >
+                <NavDropdown.Item as={Link} to="#">
+                  <i className="fas fa-user me-2"></i>
+                  Profile
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="#" onClick={() => setActiveTab('settings')}>
+                  <i className="fas fa-cog me-2"></i>
+                  Settings
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleLogout}>
+                  <i className="fas fa-sign-out-alt me-2"></i>
+                  Sign out
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <div className="d-flex gap-2">
+                <Button as={Link} to="/login" variant="outline-primary" size="sm">Login</Button>
+                <Button as={Link} to="/signup" variant="primary" size="sm">Sign Up</Button>
+              </div>
+            )}
           </div>
         </Container>
       </Navbar>
